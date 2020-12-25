@@ -18,7 +18,7 @@ Ball::~Ball() {
 	gluDeleteQuadric(qobj);
 }
 
-void Ball::loadTextures() {
+void Ball::loadTexture() {
 	texture = new Texture("../Textures/football.tga");
 }
 
@@ -58,22 +58,24 @@ void Ball::update(GLfloat time) {
 }
 
 void Ball::shoot(Slider* horiz, Slider* vert){
-	velocity[0] = horiz->getValue();
-	velocity[1] = vert->getValue();
-	velocity[2] = -1;
-	//rescale velocity vector to have magnitude equal to speed
-	GLfloat magnitude = 0;
-	for (int i = 0; i < 3; i++)
-		magnitude += velocity[i] * velocity[i];
-	magnitude = sqrtf(magnitude);
-	for (int i = 0; i < 3; i++)
-		velocity[i] *= speed/magnitude;
+	if (!moving) {
+		velocity[0] = horiz->getValue();
+		velocity[1] = vert->getValue();
+		velocity[2] = -1;
+		//rescale velocity vector to have magnitude equal to speed
+		GLfloat magnitude = 0;
+		for (int i = 0; i < 3; i++)
+			magnitude += velocity[i] * velocity[i];
+		magnitude = sqrtf(magnitude);
+		for (int i = 0; i < 3; i++)
+			velocity[i] *= speed / magnitude;
 
-	if (velocity[1] >= 0)
-		rotateCW = true;
-	else
-		rotateCW = false;
-	moving = true;
+		if (velocity[1] >= 0)
+			rotateCW = true;
+		else
+			rotateCW = false;
+		moving = true;
+	}
 }
 
 void Ball::reset()
@@ -89,7 +91,7 @@ void Ball::draw() {
 	glTranslatef(position[0], position[1], position[2]);
 	glRotatef(angle, 0, 1, 0);
 	texture->bind();
-	gluSphere(qobj, 1, 50, 50);
+	gluSphere(qobj, radius, 50, 30);
 	texture->unbind();
 	glPopMatrix();
 }

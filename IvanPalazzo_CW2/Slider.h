@@ -5,9 +5,11 @@
 #include <GL/freeglut.h>
 
 class Slider{
+public:
 	enum Orientation {
 		HORIZONTAL, VERTICAL
 	};
+private:
 	GLfloat value;
 	Orientation orientation;
 	GLfloat width;

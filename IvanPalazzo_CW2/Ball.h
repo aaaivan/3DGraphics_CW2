@@ -20,7 +20,7 @@ class Ball
 public:
 	Ball(GLfloat _radius, std::vector<GLfloat> _initPosition, GLfloat _speed, GLfloat _angularSpeed);
 	~Ball();
-	static void loadTextures();
+	static void loadTexture();
 	static void unloadTexture();
 	std::vector<GLfloat> relPosition(std::vector<GLfloat> newOrigin);
 	GLfloat getRadius();

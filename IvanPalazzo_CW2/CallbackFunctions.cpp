@@ -1,18 +1,19 @@
 #include "CallbackFunctions.h"
 #include "Globals.h"
 #include <cmath>
+#include "GameManager.h"
+
+GameManager gameManager;
 
 void setup(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	// Enable depth testing.
-	glEnable(GL_DEPTH_TEST);
-
 	createMenu();
-
+	GameManager::loadTextures();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0);
@@ -23,8 +24,6 @@ void setup(void) {
 	// Cull the back faces of the sphere.
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-
-
 }
 
 void createMenu(void) {
@@ -55,6 +54,7 @@ void display(void) {
 	glLoadIdentity();
 	gluLookAt(0, 1, 0, 0, 1, -1, 0, 1, 0);
 
+	gameManager.draw();
 
 	glutSwapBuffers();
 }

@@ -21,6 +21,7 @@ Wall::~Wall() {
 
 void Wall::loadTexture() {
 	texture = new Texture("../Textures/wall.tga");
+	Target::loadTextures();
 }
 
 void Wall::unloadTexture() {
