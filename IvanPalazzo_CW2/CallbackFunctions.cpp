@@ -2,22 +2,12 @@
 #include "Globals.h"
 #include <cmath>
 
-#include "Wall.h"
-#include "Target.h"
-Wall* w;
-
 void setup(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	// Enable depth testing.
 	glEnable(GL_DEPTH_TEST);
 
 	createMenu();
-
-	Wall::loadTexture();
-	Target::loadTextures();
-	w = new Wall(2, 1.5f, { -1, 0, -4 }, 30);
-	w->addTarget(0.5, 0.2f, Target::Points::THIRTY);
-	w->addTarget(-0.7, 0.5f, Target::Points::TWENTY);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -63,8 +53,8 @@ void mainMenu(GLint option) {
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	gluLookAt(0, 1, 0, 0, 1, -1, 0, 1, 0);
 
-	w->draw();
 
 	glutSwapBuffers();
 }

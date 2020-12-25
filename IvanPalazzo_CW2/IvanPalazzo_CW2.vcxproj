@@ -144,6 +144,7 @@
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="CallbackFunctions.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Grass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="CallbackFunctions.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Grass.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Target.h" />

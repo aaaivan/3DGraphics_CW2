@@ -62,7 +62,7 @@ GLint Wall::checkCollision(Ball* b) {
 }
 
 void Wall::draw() {
-	glLoadIdentity();
+	glPushMatrix();
 	glTranslatef(center[0], center[1], center[2]);
 	glRotatef(angle, 0, 1, 0);
 
@@ -72,7 +72,7 @@ void Wall::draw() {
 	glTexCoordPointer(2, GL_FLOAT, 0, &textCoord[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	texture->unbind();
-
+	glPopMatrix();
 	for (Target* t : targets)
 		t->draw();
 }

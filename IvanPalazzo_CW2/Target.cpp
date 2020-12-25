@@ -67,7 +67,7 @@ GLint Target::getPoints(){
 }
 
 void Target::draw(){
-	glLoadIdentity();
+	glPushMatrix();
 	glTranslatef(position[0], position[1], position[2]);
 	glRotatef(angle, 0, 1, 0);
 
@@ -77,4 +77,5 @@ void Target::draw(){
 	glTexCoordPointer(2, GL_FLOAT, 0, &textCoord[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	textures[points]->unbind();
+	glPopMatrix();
 }

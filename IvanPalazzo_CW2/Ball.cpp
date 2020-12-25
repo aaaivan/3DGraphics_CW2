@@ -85,10 +85,11 @@ void Ball::reset()
 }
 
 void Ball::draw() {
-	glLoadIdentity();
+	glPushMatrix();
 	glTranslatef(position[0], position[1], position[2]);
 	glRotatef(angle, 0, 1, 0);
 	texture->bind();
 	gluSphere(qobj, 1, 50, 50);
 	texture->unbind();
+	glPopMatrix();
 }
