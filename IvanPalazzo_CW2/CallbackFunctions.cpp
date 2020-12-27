@@ -1,16 +1,19 @@
 #include "GameManager.h"
 #include "Props.h"
+#include "Skybox.h"
 #include "CallbackFunctions.h"
 #include "Globals.h"
 #include <cmath>
 
 GameManager* gameManager = nullptr;
 Props props;
+Skybox skybox(SKYBOX_SIZE, SKYBOX_ROTATION_SPEED);
 GLint windowW = 0, windowH = 0;
 void setup(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	createMenu();
 
+	Skybox::loadTexture();
 	Props::loadTextures();
 	GameManager::loadTextures();
 	gameManager = new GameManager();
@@ -51,6 +54,7 @@ void mainMenu(GLint option) {
 		delete gameManager;
 		GameManager::unloadTextures();
 		Props::unloadTextures();
+		Skybox::unloadTexture();
 		exit(0);
 		break;
 	default:
@@ -63,8 +67,8 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	gluLookAt(0, 1, 0, 0, 1, -1, 0, 1, 0);
-	//gluLookAt(0, 10, -4, 0, 9, -4, 0, 0, -1);
 
+	skybox.draw();
 	gameManager->drawScene();
 	props.draw();
 	gameManager->drawGUI(windowW, windowH);
@@ -82,9 +86,9 @@ void reshape(GLint w, GLint h) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if (aspect >= defaultAspect)
-		glFrustum(-1 / defaultAspect * aspect, 1 / defaultAspect * aspect, -1 / defaultAspect, 1 / defaultAspect, 1, 50);
+		glFrustum(-1 / defaultAspect * aspect, 1 / defaultAspect * aspect, -1 / defaultAspect, 1 / defaultAspect, 1, 0.75f*SKYBOX_SIZE);
 	else
-		glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 50);
+		glFrustum(-1, 1, -1 / aspect, 1 / aspect, 1, 0.75f * SKYBOX_SIZE);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -122,6 +126,7 @@ void special(GLint key, GLint x, GLint y) {
 
 void update(GLint index) {
 	gameManager->update(FRAME_DURATION/1000.0f);
+	skybox.Update(FRAME_DURATION / 1000.0f);
 	glutPostRedisplay();
 	glutTimerFunc(FRAME_DURATION, update, 0);
 }

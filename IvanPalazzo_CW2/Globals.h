@@ -35,4 +35,7 @@
 #define FLOWER_WIDTH 0.6f
 #define FLOWER_HEIGHT 0.6f
 
+#define SKYBOX_SIZE 100.0f
+#define SKYBOX_ROTATION_SPEED 3.0f
+
 #endif // !GLOBALS_H

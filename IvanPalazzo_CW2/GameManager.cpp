@@ -98,7 +98,7 @@ void GameManager::drawGUI(GLint windowW, GLint windowH) {
 	glDisableClientState(GL_NORMAL_ARRAY);
 
 	//draw score message
-	glColor3f(1, 1, 1);
+	glColor3f(0.6f, 0, 0);
 	std::string message = scoreString + std::to_string(points);
 	char* str = &message[0];
 	size_t l=strlen(str);
@@ -110,6 +110,7 @@ void GameManager::drawGUI(GLint windowW, GLint windowH) {
 	l = strlen(str);
 	glRasterPos2f(windowW * 0.5f - l * 4.8f, windowH * 0.88-25.0f);
 	writeBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, str);
+	glColor3f(1, 1, 1);
 	//draw sliders
 	GLfloat scale = std::min(static_cast<float>(windowW) / WINDOW_WIDTH, static_cast<float>(windowH) / WINDOW_HEIGHT);
 	verticalSlider.draw(SLIDER_POSITION_X * scale, SLIDER_POSITION_Y * scale, scale);
