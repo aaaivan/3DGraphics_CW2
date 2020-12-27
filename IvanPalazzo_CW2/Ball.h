@@ -25,7 +25,7 @@ public:
 	std::vector<GLfloat> relPosition(std::vector<GLfloat> newOrigin);
 	GLfloat getRadius();
 	void update(GLfloat time);
-	void shoot(Slider* horiz, Slider* vert);
+	GLfloat shoot(GLfloat horiz, GLfloat vert);
 	void reset();
 	void draw();
 };

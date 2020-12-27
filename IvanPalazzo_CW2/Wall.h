@@ -39,8 +39,8 @@ public:
 	~Wall();
 	static void loadTexture();
 	static void unloadTexture();
-	void addTarget(GLfloat wallCoordX, GLfloat wallCoordY, Target::Points points);
-	GLint checkCollision(Ball* ball);
+	void addTarget(GLfloat wallCoordX, GLfloat wallCoordY, Target::Points points, GLint* targetCounter);
+	GLboolean checkCollision(Ball* ball, GLint* pointsGained);
 	void draw();
 };
 

@@ -1,14 +1,20 @@
+#include "GameManager.h"
+#include "Props.h"
 #include "CallbackFunctions.h"
 #include "Globals.h"
 #include <cmath>
-#include "GameManager.h"
 
-GameManager gameManager;
-
+GameManager* gameManager = nullptr;
+Props props;
+GLint windowW = 0, windowH = 0;
 void setup(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	createMenu();
+
+	Props::loadTextures();
 	GameManager::loadTextures();
+	gameManager = new GameManager();
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -38,9 +44,13 @@ void mainMenu(GLint option) {
 	switch (option)
 	{
 	case 0:
-		//restart;
+		delete gameManager;
+		gameManager = new GameManager();
 		break;
 	case 1:
+		delete gameManager;
+		GameManager::unloadTextures();
+		Props::unloadTextures();
 		exit(0);
 		break;
 	default:
@@ -53,8 +63,11 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	gluLookAt(0, 1, 0, 0, 1, -1, 0, 1, 0);
+	//gluLookAt(0, 10, -4, 0, 9, -4, 0, 0, -1);
 
-	gameManager.draw();
+	gameManager->drawScene();
+	props.draw();
+	gameManager->drawGUI(windowW, windowH);
 
 	glutSwapBuffers();
 }
@@ -62,6 +75,8 @@ void display(void) {
 void reshape(GLint w, GLint h) {
 	GLdouble aspect = static_cast<float>(w) / h;
 	GLdouble defaultAspect = static_cast<float>(WINDOW_WIDTH) / WINDOW_HEIGHT;
+	windowW = w;
+	windowH = h;
 
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
@@ -74,13 +89,39 @@ void reshape(GLint w, GLint h) {
 }
 
 void keyboard(unsigned char key, GLint x, GLint y) {
-
+	switch (key)
+	{
+	case ' ': //move car forward
+		gameManager->shootBall();
+		break;
+	default:
+		break;
+	}
 }
 
 void special(GLint key, GLint x, GLint y) {
-
+	switch (key)
+	{
+	case GLUT_KEY_UP: //move car forward
+		gameManager->vSlider()->increase(SLIDER_INCREMENT);
+		break;
+	case GLUT_KEY_LEFT: //rotate car anticlockwise
+		gameManager->hSlider()->decrease(SLIDER_INCREMENT);
+		break;
+	case GLUT_KEY_DOWN: //move car backwards
+		gameManager->vSlider()->decrease(SLIDER_INCREMENT);
+		break;
+	case GLUT_KEY_RIGHT: //rotate car clockwise
+		gameManager->hSlider()->increase(SLIDER_INCREMENT);
+		break;
+	default:
+		break;
+	}
+	glutPostRedisplay();
 }
 
 void update(GLint index) {
-
+	gameManager->update(FRAME_DURATION/1000.0f);
+	glutPostRedisplay();
+	glutTimerFunc(FRAME_DURATION, update, 0);
 }

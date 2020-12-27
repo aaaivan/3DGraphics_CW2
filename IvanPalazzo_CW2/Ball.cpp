@@ -46,21 +46,21 @@ void Ball::update(GLfloat time) {
 		position[2] += velocity[2] * time;
 		if (rotateCW) {
 			angle += angularSpeed * time;
-			if (angle >= 2 * M_PI)
-				angle -= 2 * M_PI;
+			if (angle >= 360.0f)
+				angle -= 360.0f;
 		}
 		else {
 			angle -= angularSpeed * time;
 			if (angle < 0)
-				angle += 2 * M_PI;
+				angle += 360.0f;
 		}
 	}
 }
 
-void Ball::shoot(Slider* horiz, Slider* vert){
+GLfloat Ball::shoot(GLfloat horiz, GLfloat vert){
 	if (!moving) {
-		velocity[0] = horiz->getValue();
-		velocity[1] = vert->getValue();
+		velocity[0] = horiz;
+		velocity[1] = vert;
 		velocity[2] = -1;
 		//rescale velocity vector to have magnitude equal to speed
 		GLfloat magnitude = 0;
@@ -70,12 +70,14 @@ void Ball::shoot(Slider* horiz, Slider* vert){
 		for (int i = 0; i < 3; i++)
 			velocity[i] *= speed / magnitude;
 
-		if (velocity[1] >= 0)
+		if (velocity[0] >= 0)
 			rotateCW = true;
 		else
 			rotateCW = false;
 		moving = true;
+		return true;
 	}
+	return false;
 }
 
 void Ball::reset()

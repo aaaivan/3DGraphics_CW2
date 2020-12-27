@@ -48,6 +48,12 @@
     <ClCompile Include="Grass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Props.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CallbackFunctions.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Grass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Props.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,15 +14,46 @@ private:
 	Orientation orientation;
 	GLfloat width;
 	GLfloat height;
-	std::vector<Texture*> textures;
+	std::vector<GLfloat> squarePos;
+	std::vector<GLfloat> squareCoord = {
+		1,1,0,
+		-1,1,0,
+		-1,-1,0,
+		1,-1,0,
+	};
+	std::vector<GLfloat> squareColours = {
+		1,0.8f,0,
+		1,0.8f,0,
+		1,0.8f,0,
+		1,0.8f,0,
+	};
+	std::vector<GLfloat> vertCoord = {
+		1,1,0,
+		-1,1,0,
+		-1,-1,0,
+		1,-1,0,
+	};
+	std::vector<GLfloat> textCoord = {
+		1,1,
+		0,1,
+		0,0,
+		1,0,
+	};
+	std::vector<GLfloat> vertNormals = {
+	0,0,1,
+	0,0,1,
+	0,0,1,
+	0,0,1,
+	};
+	static std::vector<Texture*> textures;
 public:
 	Slider(Orientation _orientation, GLfloat _width, GLfloat _height);
-	void loadTextures();
-	void unloadTextures();
-	GLfloat getValue();
+	static void loadTextures();
+	static void unloadTextures();
+	GLfloat getValue(GLfloat lowerBound = -1, GLfloat upperBound = 1);
 	void increase(GLfloat increment);
-	void decrcease(GLfloat decrement);
-	void draw();
+	void decrease(GLfloat decrement);
+	void draw(GLfloat positionX, GLfloat positionY, GLfloat scale);
 };
 
 #endif // !SLIDER_H
