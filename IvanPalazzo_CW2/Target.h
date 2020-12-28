@@ -12,7 +12,7 @@ public:
 private:
 	std::vector<GLfloat> position;
 	GLfloat size;
-	GLfloat angle;
+	GLfloat angle_azim, angle_polar;
 	Points points;
 	static std::vector<Texture*> textures;
 	std::vector<GLfloat> vertCoord = {
@@ -34,7 +34,7 @@ private:
 		0,0,1,
 	};
 public:
-	Target(std::vector<GLfloat> _position, GLfloat _angle, Points _points);
+	Target(std::vector<GLfloat> _position, Points _points, GLfloat _angle_azim, GLfloat _angle_polar=0);
 	static void loadTextures();
 	static void unloadTextures();
 	std::vector<GLfloat> getPosition();

@@ -1,5 +1,4 @@
 #include "Wall.h"
-#include "Globals.h"
 
 Texture* Wall::texture=nullptr;
 
@@ -36,7 +35,7 @@ void Wall::addTarget(GLfloat wallCoordX, GLfloat wallCoordY, Target::Points poin
 		center[1] + wallCoordY,
 		center[2] - wallCoordX * sinf(angle * M_PI / 180)
 	};
-	targets.push_back(new Target(targetPos, angle, points));
+	targets.push_back(new Target(targetPos, points, angle, 0));
 	if (targetCounter)
 		*targetCounter += 1;
 }
@@ -78,6 +77,7 @@ void Wall::draw() {
 	glNormalPointer(GL_FLOAT, 0, &vertNormals[0]);
 	glTexCoordPointer(2, GL_FLOAT, 0, &textCoord[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 4, 4);
 	texture->unbind();
 	glPopMatrix();
 	for (Target* t : targets)

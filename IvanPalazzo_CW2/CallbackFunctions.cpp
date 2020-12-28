@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "Props.h"
 #include "Skybox.h"
+#include "Lighting.h"
 #include "CallbackFunctions.h"
 #include "Globals.h"
 #include <cmath>
@@ -9,6 +10,7 @@ GameManager* gameManager = nullptr;
 Props props;
 Skybox skybox(SKYBOX_SIZE, SKYBOX_ROTATION_SPEED);
 GLint windowW = 0, windowH = 0;
+GLboolean followBall = false;
 void setup(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	createMenu();
@@ -33,6 +35,17 @@ void setup(void) {
 	// Cull the back faces of the sphere.
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, Lighting::m_ambientAndDiffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, Lighting::m_specular);
+	glEnable(GL_LIGHTING);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, Lighting::l_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, Lighting::spot_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, Lighting::spot_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, Lighting::spot_position);
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, Lighting::spot_angle);
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, Lighting::spot_quadAtten);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, Lighting::spot_direction);
 }
 
 void createMenu(void) {
@@ -66,8 +79,18 @@ void mainMenu(GLint option) {
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	if (followBall) {
+		std::vector<GLfloat> relPos = gameManager->ballPtr()->relToInitPosition();
+		GLfloat lightrelPos[4] = {
+			Lighting::spot_position[0] - relPos[0],
+			Lighting::spot_position[1] - relPos[1],
+			Lighting::spot_position[2] - relPos[2],
+			1
+		};
+		glLightfv(GL_LIGHT0, GL_POSITION, lightrelPos);
+		glTranslatef(-relPos[0], -relPos[1], -relPos[2]);
+	}
 	gluLookAt(0, 1, 0, 0, 1, -1, 0, 1, 0);
-
 	skybox.draw();
 	gameManager->drawScene();
 	props.draw();
@@ -97,6 +120,9 @@ void keyboard(unsigned char key, GLint x, GLint y) {
 	{
 	case ' ': //move car forward
 		gameManager->shootBall();
+		break;
+	case 'f':
+		followBall = !followBall;
 		break;
 	default:
 		break;

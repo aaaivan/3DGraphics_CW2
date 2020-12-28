@@ -1,5 +1,5 @@
 #include "Ball.h"
-#include "Globals.h"
+#include "Lighting.h"
 #include <cmath>
 
 Texture* Ball::texture = nullptr;
@@ -7,7 +7,7 @@ Texture* Ball::texture = nullptr;
 Ball::Ball(GLfloat _radius, std::vector<GLfloat> _initPosition, GLfloat _speed, GLfloat _angularSpeed):
 	radius(_radius), initPosition(_initPosition), position(initPosition),
 	velocity(3, 0), speed(_speed), angle(0), angularSpeed(_angularSpeed),
-	rotateCW(true), moving(false), qobj(gluNewQuadric()) {
+	moving(false), qobj(gluNewQuadric()) {
 	gluQuadricDrawStyle(qobj, GLU_FILL);
 	gluQuadricNormals(qobj, GLU_SMOOTH);
 	gluQuadricOrientation(qobj, GLU_OUTSIDE);
@@ -35,6 +35,15 @@ std::vector<GLfloat> Ball::relPosition(std::vector<GLfloat> newOrigin) {
 	return relPos;
 }
 
+std::vector<GLfloat> Ball::relToInitPosition()
+{
+	std::vector<GLfloat> relPos;
+	relPos.push_back(position[0] - initPosition[0]);
+	relPos.push_back(position[1] - initPosition[1]);
+	relPos.push_back(position[2] - initPosition[2]);
+	return relPos;
+}
+
 GLfloat Ball::getRadius() {
 	return radius;
 }
@@ -44,16 +53,9 @@ void Ball::update(GLfloat time) {
 		position[0] += velocity[0] * time;
 		position[1] += velocity[1] * time;
 		position[2] += velocity[2] * time;
-		if (rotateCW) {
-			angle += angularSpeed * time;
-			if (angle >= 360.0f)
-				angle -= 360.0f;
-		}
-		else {
-			angle -= angularSpeed * time;
-			if (angle < 0)
-				angle += 360.0f;
-		}
+		angle -= angularSpeed * time;
+		if (angle < 0.0f)
+			angle += 360.0f;
 	}
 }
 
@@ -69,11 +71,6 @@ GLfloat Ball::shoot(GLfloat horiz, GLfloat vert){
 		magnitude = sqrtf(magnitude);
 		for (int i = 0; i < 3; i++)
 			velocity[i] *= speed / magnitude;
-
-		if (velocity[0] >= 0)
-			rotateCW = true;
-		else
-			rotateCW = false;
 		moving = true;
 		return true;
 	}
@@ -89,11 +86,17 @@ void Ball::reset()
 }
 
 void Ball::draw() {
+	glEnable(GL_LIGHT0);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, Lighting::m_specularBall);
+	glMaterialf(GL_FRONT, GL_SHININESS, Lighting::shininess_ball);
 	glPushMatrix();
 	glTranslatef(position[0], position[1], position[2]);
-	glRotatef(angle, 0, 1, 0);
+	glRotatef(angle, -velocity[2], 0, velocity[0]);
 	texture->bind();
 	gluSphere(qobj, radius, 50, 30);
 	texture->unbind();
 	glPopMatrix();
+	glMaterialf(GL_FRONT, GL_SHININESS, 1);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, Lighting::m_specular);
+	glDisable(GL_LIGHT0);
 }

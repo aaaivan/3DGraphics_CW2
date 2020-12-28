@@ -3,8 +3,8 @@
 
 #define M_PI 3.14159265f
 
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 576
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 #define WINDOW_POS_X 100
 #define WINDOW_POS_Y 20
 #define FRAME_DURATION 20
@@ -21,8 +21,9 @@
 #define TARGET10_SIZE 1.0f
 
 #define WALL_HEIGHT 3.0f
-#define SIDE_WALL_LENGTH 8.0f
+#define SIDE_WALL_LENGTH 10.0f
 #define FRONT_WALL_LENGTH 8.0f
+#define WALL_THICKNESS 1.0f
 
 #define SLIDER_THICKNESS 30.0f
 #define SLIDER_LENGTH 180.0f

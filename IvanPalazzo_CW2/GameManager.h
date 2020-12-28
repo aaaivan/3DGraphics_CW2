@@ -21,6 +21,7 @@ public:
 	static void unloadTextures();
 	Slider* hSlider();
 	Slider* vSlider();
+	Ball* ballPtr();
 	void shootBall();
 	void update(GLfloat time);
 	void drawScene();

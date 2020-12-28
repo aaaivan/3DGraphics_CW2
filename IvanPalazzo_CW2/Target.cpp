@@ -2,8 +2,8 @@
 #include "Globals.h"
 std::vector<Texture*> Target::textures;
 
-Target::Target(std::vector<GLfloat> _position, GLfloat _angle, Points _points):
-position(_position), angle(_angle), points(_points), size(0) {
+Target::Target(std::vector<GLfloat> _position, Points _points, GLfloat _angle_azim, GLfloat _angle_polar):
+position(_position), points(_points), size(0), angle_azim(_angle_azim), angle_polar(_angle_polar) {
 	switch (_points)
 	{
 	case TEN:
@@ -16,7 +16,7 @@ position(_position), angle(_angle), points(_points), size(0) {
 		size = TARGET30_SIZE;
 		break;
 	default:
-		size = TARGET10_SIZE;
+		size = TARGET30_SIZE;
 		break;
 	}
 	for (int i = 0; i < vertCoord.size(); i += 3)
@@ -69,7 +69,8 @@ GLint Target::getPoints(){
 void Target::draw(){
 	glPushMatrix();
 	glTranslatef(position[0], position[1], position[2]);
-	glRotatef(angle, 0, 1, 0);
+	glRotatef(angle_azim, 0, 1, 0);
+	glRotatef(angle_polar, 1, 0, 0);
 
 	textures[points]->bind();
 	glVertexPointer(3, GL_FLOAT, 0, &vertCoord[0]);

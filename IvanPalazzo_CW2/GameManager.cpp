@@ -11,9 +11,9 @@ horizontalSlider(Slider::Orientation::HORIZONTAL, SLIDER_LENGTH, SLIDER_THICKNES
 verticalSlider(Slider::Orientation::VERTICAL, SLIDER_THICKNESS, SLIDER_LENGTH),
 scoreString("Score: "), endOfGame(false), points(0), attemptsLeft(MAX_BALL_THROWS){
 	walls.push_back(Wall(
-		SIDE_WALL_LENGTH,
+		SIDE_WALL_LENGTH + WALL_THICKNESS,
 		WALL_HEIGHT,
-		{ -FRONT_WALL_LENGTH / 2, WALL_HEIGHT / 2, -SIDE_WALL_LENGTH / 2 },
+		{ -FRONT_WALL_LENGTH / 2, WALL_HEIGHT / 2, -(SIDE_WALL_LENGTH + WALL_THICKNESS) / 2 },
 		90));
 	walls.push_back(Wall(
 		FRONT_WALL_LENGTH,
@@ -21,9 +21,9 @@ scoreString("Score: "), endOfGame(false), points(0), attemptsLeft(MAX_BALL_THROW
 		{ 0, WALL_HEIGHT / 2, -SIDE_WALL_LENGTH },
 		0));
 	walls.push_back(Wall(
-		SIDE_WALL_LENGTH,
+		SIDE_WALL_LENGTH + WALL_THICKNESS,
 		WALL_HEIGHT,
-		{ FRONT_WALL_LENGTH / 2, WALL_HEIGHT / 2, -SIDE_WALL_LENGTH / 2 },
+		{ FRONT_WALL_LENGTH / 2, WALL_HEIGHT / 2, -(SIDE_WALL_LENGTH + WALL_THICKNESS) / 2 },
 		270));
 	walls[1].addTarget(FRONT_WALL_LENGTH / 2 - 1.2f * TARGET30_SIZE, WALL_HEIGHT/2 - 1.2f * TARGET30_SIZE, Target::Points::THIRTY, &targetsLeft);
 	walls[1].addTarget(-FRONT_WALL_LENGTH / 2 + 1.2f * TARGET30_SIZE, WALL_HEIGHT/2 - 1.2f * TARGET30_SIZE, Target::Points::THIRTY, &targetsLeft);
@@ -55,8 +55,12 @@ Slider* GameManager::vSlider() {
 	return &verticalSlider;
 }
 
+Ball* GameManager::ballPtr() {
+	return &ball;
+}
+
 void GameManager::shootBall(){
-	if (attemptsLeft == 0)
+	if (endOfGame)
 		return;
 	if (ball.shoot(horizontalSlider.getValue(), verticalSlider.getValue(0,0.5f)))
 		attemptsLeft--;
@@ -93,22 +97,23 @@ void GameManager::drawScene() {
 }
 
 void GameManager::drawGUI(GLint windowW, GLint windowH) {
+	glDisable(GL_LIGHTING);
 	setOrthographicProjection(windowW, windowH);
 	glDisable(GL_DEPTH_TEST);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
 	//draw score message
-	glColor3f(0.6f, 0, 0);
+	glColor3f(0, 0, 0);
 	std::string message = scoreString + std::to_string(points);
 	char* str = &message[0];
 	size_t l=strlen(str);
-	glRasterPos2f(windowW * 0.5f - l * 4.8f, windowH * 0.88f);
+	glRasterPos2f(windowW * 0.5f - l * 4.8f, windowH * 0.85f);
 	writeBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, str);
 	//draw attempts left message
 	message = "Attempts left: " + std::to_string(attemptsLeft);
 	str = &message[0];
 	l = strlen(str);
-	glRasterPos2f(windowW * 0.5f - l * 4.8f, windowH * 0.88-25.0f);
+	glRasterPos2f(windowW * 0.5f - l * 4.8f, windowH * 0.85-25.0f);
 	writeBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, str);
 	glColor3f(1, 1, 1);
 	//draw sliders
@@ -119,6 +124,7 @@ void GameManager::drawGUI(GLint windowW, GLint windowH) {
 	glEnable(GL_DEPTH_TEST);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	setPerspectiveProjection();
+	glEnable(GL_LIGHTING);
 }
 
 void GameManager::writeBitmapString(void* font, char* str) {

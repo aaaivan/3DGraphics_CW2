@@ -2,6 +2,7 @@
 #define BALL_H
 #include "Slider.h"
 #include "Texture.h"
+#include "Globals.h"
 #include <string>
 #include <vector>
 #include <GL/freeglut.h>
@@ -14,7 +15,7 @@ class Ball
 	std::vector<GLfloat> velocity;
 	GLfloat speed, angularSpeed;
 	GLfloat angle;
-	GLboolean rotateCW, moving;
+	GLboolean moving;
 	GLUquadricObj* qobj;
 	static Texture* texture;
 public:
@@ -23,6 +24,7 @@ public:
 	static void loadTexture();
 	static void unloadTexture();
 	std::vector<GLfloat> relPosition(std::vector<GLfloat> newOrigin);
+	std::vector<GLfloat> relToInitPosition();
 	GLfloat getRadius();
 	void update(GLfloat time);
 	GLfloat shoot(GLfloat horiz, GLfloat vert);

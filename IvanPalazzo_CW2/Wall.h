@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "Target.h"
 #include "Ball.h"
+#include "Globals.h"
 #include <GL/freeglut.h>
 #include <vector>
 #include <cmath>
@@ -16,22 +17,40 @@ class Wall
 	std::vector<Target*> targets;
 	static Texture* texture;
 	std::vector<GLfloat> vertCoord = {
+		//front
 		1,1,0,
 		-1,1,0,
 		-1,-1,0,
 		1,-1,0,
+		//top
+		-1,1,0,
+		1,1,0,
+		1,1,-WALL_THICKNESS,
+		-1,1,-WALL_THICKNESS,
 	};
 	std::vector<GLfloat> textCoord = {
+		//front
 		1,1,
 		0,1,
 		0,0,
 		1,0,
+		//top
+		0,0,
+		1,0,
+		1,0.2f,
+		0,0.2f,
 	};
 	std::vector<GLfloat> vertNormals = {
+		//front
 		0,0,1,
 		0,0,1,
 		0,0,1,
 		0,0,1,
+		//top
+		0,1,0,
+		0,1,0,
+		0,1,0,
+		0,1,0,
 	};
 
 public:

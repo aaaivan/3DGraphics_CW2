@@ -26,6 +26,7 @@ void Skybox::Update(GLfloat time) {
 }
 
 void Skybox::draw() {
+	glDisable(GL_LIGHTING);
 	glPushMatrix();
 	glRotatef(angle, 0, 1, 0);
 
@@ -40,4 +41,5 @@ void Skybox::draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, 16, 4);
 	texture->unbind();
 	glPopMatrix();
+	glEnable(GL_LIGHTING);
 }
