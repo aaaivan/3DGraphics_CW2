@@ -37,10 +37,10 @@ public:
 	Target(std::vector<GLfloat> _position, Points _points, GLfloat _angle_azim, GLfloat _angle_polar=0);
 	static void loadTextures();
 	static void unloadTextures();
-	std::vector<GLfloat> getPosition();
-	GLfloat getRadius();
+	std::vector<GLfloat> getPosition() const;
+	GLfloat getRadius() const;
 	void deactivate();
-	GLint getPoints();
+	GLint getPoints() const;
 	void draw();
 };
 

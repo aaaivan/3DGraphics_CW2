@@ -41,19 +41,11 @@ GLfloat Slider::getValue(GLfloat lowerBound, GLfloat upperBound) {
 	return lowerBound + (upperBound-lowerBound)*(value+1)/2;
 }
 
-void Slider::increase(GLfloat increment) {
+void Slider::changeValue(GLfloat increment) {
 	value += increment;
 	if (value > 1.0f)
 		value = 1.0f;
-	if (orientation == Orientation::HORIZONTAL)
-		squarePos[0] = width / 2 * value;
-	else
-		squarePos[1] = height / 2 * value;
-}
-
-void Slider::decrease(GLfloat decrement) {
-	value -= decrement;
-	if (value < -1.0f)
+	else if (value < -1.0f)
 		value = -1.0f;
 	if (orientation == Orientation::HORIZONTAL)
 		squarePos[0] = width / 2 * value;

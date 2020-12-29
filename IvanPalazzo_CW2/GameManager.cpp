@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include <algorithm>
 
+//constructor: initialize all the game objects and variables 
 GameManager::GameManager():
 ball(BALL_RADIUS,
 	{BALL_INIT_POSITION_X, BALL_RADIUS, BALL_INIT_POSITION_Z},
@@ -10,6 +11,7 @@ ball(BALL_RADIUS,
 horizontalSlider(Slider::Orientation::HORIZONTAL, SLIDER_LENGTH, SLIDER_THICKNESS),
 verticalSlider(Slider::Orientation::VERTICAL, SLIDER_THICKNESS, SLIDER_LENGTH),
 scoreString("Score: "), endOfGame(false), points(0), attemptsLeft(MAX_BALL_THROWS){
+	//create walls
 	walls.push_back(Wall(
 		SIDE_WALL_LENGTH + WALL_THICKNESS,
 		WALL_HEIGHT,
@@ -25,6 +27,7 @@ scoreString("Score: "), endOfGame(false), points(0), attemptsLeft(MAX_BALL_THROW
 		WALL_HEIGHT,
 		{ FRONT_WALL_LENGTH / 2, WALL_HEIGHT / 2, -(SIDE_WALL_LENGTH + WALL_THICKNESS) / 2 },
 		270));
+	//add targets to the wall at the back
 	walls[1].addTarget(FRONT_WALL_LENGTH / 2 - 1.2f * TARGET30_SIZE, WALL_HEIGHT/2 - 1.2f * TARGET30_SIZE, Target::Points::THIRTY, &targetsLeft);
 	walls[1].addTarget(-FRONT_WALL_LENGTH / 2 + 1.2f * TARGET30_SIZE, WALL_HEIGHT/2 - 1.2f * TARGET30_SIZE, Target::Points::THIRTY, &targetsLeft);
 	walls[1].addTarget(FRONT_WALL_LENGTH / 2 - 1.2f * TARGET30_SIZE, -WALL_HEIGHT/2 + 1.2f * TARGET30_SIZE, Target::Points::THIRTY, &targetsLeft);
@@ -35,30 +38,35 @@ scoreString("Score: "), endOfGame(false), points(0), attemptsLeft(MAX_BALL_THROW
 	walls[1].addTarget(0, -WALL_HEIGHT * 0.22f, Target::Points::TEN, &targetsLeft);
 }
 
+//load textures for rendering
 void GameManager::loadTextures() {
 	Ball::loadTexture();
 	Wall::loadTexture();
 	Slider::loadTextures();
 }
 
+//delete textures from memory
 void GameManager::unloadTextures(){
 	Ball::unloadTexture();
 	Wall::unloadTexture();
 	Slider::unloadTextures();
 }
 
-Slider* GameManager::hSlider() {
-	return &horizontalSlider;
+//move th evertical and horizontal slider
+void GameManager::moveSlider(GLfloat amount, Slider::Orientation orientation){
+	if (!endOfGame) {
+		if (orientation == Slider::Orientation::HORIZONTAL)
+			horizontalSlider.changeValue(amount);
+		else
+			verticalSlider.changeValue(amount);
+	}
 }
 
-Slider* GameManager::vSlider() {
-	return &verticalSlider;
-}
-
-Ball* GameManager::ballPtr() {
+Ball const* GameManager::ballPtr() const {
 	return &ball;
 }
 
+//shoot the ball if the game is not over
 void GameManager::shootBall(){
 	if (endOfGame)
 		return;
@@ -66,22 +74,24 @@ void GameManager::shootBall(){
 		attemptsLeft--;
 }
 
+//update scene
 void GameManager::update(GLfloat time){
 	if (!endOfGame) {
 		ball.update(time);
+		//check collision with the walls
 		for (Wall& w : walls) {
 			GLint pointsGained = 0;
-			if (w.checkCollision(&ball, &pointsGained)) {
+			if (w.checkCollision(&ball, &pointsGained)) {//collision detected
 				ball.reset();
-				if (pointsGained > 0) {
+				if (pointsGained > 0) {//target hit
 					points += pointsGained;
 					targetsLeft--;
 				}
-				if (targetsLeft == 0) {
+				if (targetsLeft == 0) {//all targets have been hit
 					scoreString = "You Won! Score: ";
 					endOfGame = true;
 				}
-				else if (attemptsLeft == 0) {
+				else if (attemptsLeft == 0) {//no attempts left: game over
 					scoreString = "You Lost! Score: ";
 					endOfGame = true;
 				}
@@ -97,8 +107,8 @@ void GameManager::drawScene() {
 }
 
 void GameManager::drawGUI(GLint windowW, GLint windowH) {
-	glDisable(GL_LIGHTING);
 	setOrthographicProjection(windowW, windowH);
+	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
@@ -123,17 +133,20 @@ void GameManager::drawGUI(GLint windowW, GLint windowH) {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	setPerspectiveProjection();
 	glEnable(GL_LIGHTING);
+	setPerspectiveProjection();
 }
 
+//display string on the scene
 void GameManager::writeBitmapString(void* font, char* str) {
 	char* c;
 	for (c = str; *c != '\0'; c++)
 		glutBitmapCharacter(font, *c);
 }
 
+//swich to orthographic projection
 void GameManager::setOrthographicProjection(GLint windowW, GLint windowH){
+	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
@@ -143,6 +156,7 @@ void GameManager::setOrthographicProjection(GLint windowW, GLint windowH){
 	glMatrixMode(GL_MODELVIEW);
 }
 
+//swich to perspective projection
 void GameManager::setPerspectiveProjection(){
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

@@ -3,9 +3,13 @@
 #include "CallbackFunctions.h"
 
 int main(int argc, char** argv){
-
-	//std::cout << "**********FOOTBALL: CONTROLS**********\n->Mouse's right button: main menu\n" <<
-	//	"->WASD/Arrow keys: move/rotate car (you can select your preferred control type from the menu)" << std::endl;
+	//print controls to the consols
+	std::cout << "**********FOOTBALL GAME: CONTROLS**********\n"
+		<< "->Right button (mouse): main menu. Use it to restart the game or quit.\n"
+		<< "->Arrow keys: aim ball up/down and left/right\n"
+		<< "->Space bar: throw ball\n"
+		<< "->F key: toggle camera view\n"
+		<< std::endl;
 	
 	//initialize freeglut library
 	glutInit(&argc, argv);
@@ -26,7 +30,7 @@ int main(int argc, char** argv){
 	//setup routine
 	setup();
 
-	//animation
+	//function to update scene
 	glutTimerFunc(FRAME_DURATION, update, 0);
 
 	glutMainLoop();

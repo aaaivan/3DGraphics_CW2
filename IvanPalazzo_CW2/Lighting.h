@@ -9,8 +9,9 @@ public:
 	const static GLfloat m_specular[4];
 	const static GLfloat m_specularBall[4];
 	const static GLfloat shininess_ball;
-	//light properties
+	//ambient light properties
 	const static GLfloat l_ambient[4];
+	//spotlight properties
 	const static GLfloat spot_diffuse[4];
 	const static GLfloat spot_specular[4];
 	const static GLfloat spot_position[4] ;

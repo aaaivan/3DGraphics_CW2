@@ -95,7 +95,7 @@ public:
 	Skybox(GLfloat _size, GLfloat _angularSpeed);
 	static void loadTexture();
 	static void unloadTexture();
-	void Update(GLfloat time);
+	void update(GLfloat time);
 	void draw();
 };
 

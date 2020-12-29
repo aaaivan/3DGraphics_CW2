@@ -19,9 +19,8 @@ public:
 	GameManager();
 	static void loadTextures();
 	static void unloadTextures();
-	Slider* hSlider();
-	Slider* vSlider();
-	Ball* ballPtr();
+	void moveSlider(GLfloat amount, Slider::Orientation orientation);
+	Ball const* ballPtr() const;
 	void shootBall();
 	void update(GLfloat time);
 	void drawScene();

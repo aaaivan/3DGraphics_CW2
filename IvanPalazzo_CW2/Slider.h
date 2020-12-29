@@ -51,8 +51,7 @@ public:
 	static void loadTextures();
 	static void unloadTextures();
 	GLfloat getValue(GLfloat lowerBound = -1, GLfloat upperBound = 1);
-	void increase(GLfloat increment);
-	void decrease(GLfloat decrement);
+	void changeValue(GLfloat increment);
 	void draw(GLfloat positionX, GLfloat positionY, GLfloat scale);
 };
 

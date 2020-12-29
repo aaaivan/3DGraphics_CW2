@@ -14,7 +14,7 @@ class Wall
 	std::vector<GLfloat> center;
 	std::vector<GLfloat> normal;
 	GLfloat angle;
-	std::vector<Target*> targets;
+	std::vector<Target*> targets; //list of targets on the wall
 	static Texture* texture;
 	std::vector<GLfloat> vertCoord = {
 		//front

@@ -30,8 +30,8 @@ private:
 		0,0,1,
 		0,0,1,
 	};
-	GLfloat angle;
-	Type type;
+	GLfloat angle; //rotation about the Y axis
+	Type type; //type of plant
 	static std::vector<Texture*> textures;
 public:
 	Plant(GLfloat _width, GLfloat _height, std::vector<GLfloat> _position, GLfloat _angle, Type _type);

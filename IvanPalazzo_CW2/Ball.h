@@ -7,8 +7,7 @@
 #include <vector>
 #include <GL/freeglut.h>
 
-class Ball
-{
+class Ball {
 	std::vector<GLfloat> initPosition;
 	GLfloat radius;
 	std::vector<GLfloat> position;
@@ -16,16 +15,16 @@ class Ball
 	GLfloat speed, angularSpeed;
 	GLfloat angle;
 	GLboolean moving;
-	GLUquadricObj* qobj;
+	GLUquadricObj* qobj; //3d model
 	static Texture* texture;
 public:
 	Ball(GLfloat _radius, std::vector<GLfloat> _initPosition, GLfloat _speed, GLfloat _angularSpeed);
 	~Ball();
 	static void loadTexture();
 	static void unloadTexture();
-	std::vector<GLfloat> relPosition(std::vector<GLfloat> newOrigin);
-	std::vector<GLfloat> relToInitPosition();
-	GLfloat getRadius();
+	std::vector<GLfloat> relPosition(std::vector<GLfloat> newOrigin) const;
+	std::vector<GLfloat> relToInitPosition() const;
+	GLfloat getRadius() const;
 	void update(GLfloat time);
 	GLfloat shoot(GLfloat horiz, GLfloat vert);
 	void reset();

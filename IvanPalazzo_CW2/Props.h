@@ -7,6 +7,8 @@
 #include <GL/freeglut.h>
 #include <vector>
 
+//contains the decorative elements of the scene
+//with no collision detection
 class Props{
 	Grass grass;
 	std::vector<Plant> plants;
